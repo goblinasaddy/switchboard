@@ -121,3 +121,85 @@ class GenerationFailedEvent(BaseEvent):
     @property
     def error(self) -> str:
         return self.payload["error"]
+
+
+class IndexStartedEvent(BaseEvent):
+    """Emitted when repository scanner begins scanning codebase files."""
+    def __init__(self, root_path: str) -> None:
+        super().__init__(payload={"root_path": root_path})
+
+    @property
+    def root_path(self) -> str:
+        return self.payload["root_path"]
+
+
+class IndexCompletedEvent(BaseEvent):
+    """Emitted when repository scanning and symbol extraction completes successfully."""
+    def __init__(self, root_path: str, total_files: int, total_symbols: int) -> None:
+        super().__init__(payload={
+            "root_path": root_path,
+            "total_files": total_files,
+            "total_symbols": total_symbols
+        })
+
+    @property
+    def root_path(self) -> str:
+        return self.payload["root_path"]
+
+    @property
+    def total_files(self) -> int:
+        return self.payload["total_files"]
+
+    @property
+    def total_symbols(self) -> int:
+        return self.payload["total_symbols"]
+
+
+class IndexFailedEvent(BaseEvent):
+    """Emitted when repository scanning fails."""
+    def __init__(self, root_path: str, error: str) -> None:
+        super().__init__(payload={"root_path": root_path, "error": error})
+
+    @property
+    def root_path(self) -> str:
+        return self.payload["root_path"]
+
+    @property
+    def error(self) -> str:
+        return self.payload["error"]
+
+
+class FileParsedEvent(BaseEvent):
+    """Emitted when a single file is successfully parsed into AST symbols."""
+    def __init__(self, file_path: str, symbols_count: int) -> None:
+        super().__init__(payload={"file_path": file_path, "symbols_count": symbols_count})
+
+    @property
+    def file_path(self) -> str:
+        return self.payload["file_path"]
+
+    @property
+    def symbols_count(self) -> int:
+        return self.payload["symbols_count"]
+
+
+class ContextBuiltEvent(BaseEvent):
+    """Emitted when a query-specific ContextPackage is successfully compiled."""
+    def __init__(self, query: str, files_count: int, symbols_count: int) -> None:
+        super().__init__(payload={
+            "query": query,
+            "files_count": files_count,
+            "symbols_count": symbols_count
+        })
+
+    @property
+    def query(self) -> str:
+        return self.payload["query"]
+
+    @property
+    def files_count(self) -> int:
+        return self.payload["files_count"]
+
+    @property
+    def symbols_count(self) -> int:
+        return self.payload["symbols_count"]

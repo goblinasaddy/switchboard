@@ -57,7 +57,12 @@ async def bootstrap_platform(
     compute_manager = ComputeManager(provider_registry=provider_registry, event_bus=event_bus)
     registry.register("compute_manager", compute_manager)
 
-    # 7. Instantiate Kernel coordinator
+    # 7. Instantiate & Register Context Layer (ContextManager)
+    from switchboard.context.manager import ContextManager
+    context_manager = ContextManager(root_path=".", event_bus=event_bus)
+    registry.register("context_manager", context_manager)
+
+    # 8. Instantiate Kernel coordinator
     kernel = Kernel(settings=settings, registry=registry)
     logger.info("Kernel bootstrapped and ready for lifecycle initialization")
     

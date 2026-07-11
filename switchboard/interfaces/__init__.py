@@ -3,6 +3,7 @@ from switchboard.interfaces.event_bus import IEventBus
 from switchboard.interfaces.registry import IRegistry
 from switchboard.interfaces.compute import IComputeLayer, IComputeSession
 from switchboard.interfaces.provider import IProvider
+from switchboard.interfaces.context import IParser, IContextEngine
 
 __all__ = [
     "IService",
@@ -11,4 +12,6 @@ __all__ = [
     "IComputeLayer",
     "IComputeSession",
     "IProvider",
+    "IParser",
+    "IContextEngine",
 ]

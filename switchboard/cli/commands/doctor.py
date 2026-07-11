@@ -61,6 +61,16 @@ def doctor_command() -> None:
                 except Exception:
                     console.print(f"  [yellow][WARN][/yellow] Ollama offline at {settings.ollama_url}. (Ollama backend not running)")
 
+                # Check Context Engine
+                try:
+                    context_manager = kernel.get_service("context_manager")
+                    repo_model = await context_manager.scan()
+                    langs_summary = {k.value: v for k, v in repo_model.languages.items()}
+                    console.print(f"  [green][OK][/green] Context Engine indexed codebase: {repo_model.total_files} files, {repo_model.total_symbols} symbols. Languages: {langs_summary}")
+                except Exception as ex:
+                    console.print(f"  [red][FAIL][/red] Context Engine indexing failed: {ex}")
+                    raise
+
                 await kernel.shutdown()
                 return True
             except Exception as ex:

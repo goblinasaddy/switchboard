@@ -6,6 +6,14 @@ from switchboard.types.runtime import (
     GenerationRequest,
     GenerationResponse,
 )
+from switchboard.types.context import (
+    Language,
+    SymbolType,
+    Symbol,
+    SourceFile,
+    RepositoryModel,
+    ContextPackage,
+)
 from switchboard.types.events import (
     ProviderLoadedEvent,
     ProviderUnloadedEvent,
@@ -16,6 +24,11 @@ from switchboard.types.events import (
     GenerationStartedEvent,
     GenerationCompletedEvent,
     GenerationFailedEvent,
+    IndexStartedEvent,
+    IndexCompletedEvent,
+    IndexFailedEvent,
+    FileParsedEvent,
+    ContextBuiltEvent,
 )
 
 __all__ = [
@@ -25,6 +38,12 @@ __all__ = [
     "ModelStatus",
     "GenerationRequest",
     "GenerationResponse",
+    "Language",
+    "SymbolType",
+    "Symbol",
+    "SourceFile",
+    "RepositoryModel",
+    "ContextPackage",
     "ProviderLoadedEvent",
     "ProviderUnloadedEvent",
     "ModelLoadedEvent",
@@ -34,4 +53,9 @@ __all__ = [
     "GenerationStartedEvent",
     "GenerationCompletedEvent",
     "GenerationFailedEvent",
+    "IndexStartedEvent",
+    "IndexCompletedEvent",
+    "IndexFailedEvent",
+    "FileParsedEvent",
+    "ContextBuiltEvent",
 ]
