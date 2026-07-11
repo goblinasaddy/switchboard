@@ -451,3 +451,59 @@ class ReflectionStoredEvent(BaseEvent):
     @property
     def task_id(self) -> UUID:
         return UUID(self.payload["task_id"])
+
+
+class EvaluationStartedEvent(BaseEvent):
+    """Emitted when a task evaluation runs."""
+    def __init__(self, task_id: UUID) -> None:
+        super().__init__(payload={"task_id": str(task_id)})
+
+    @property
+    def task_id(self) -> UUID:
+        return UUID(self.payload["task_id"])
+
+
+class EvaluationCompletedEvent(BaseEvent):
+    """Emitted when task evaluation concludes."""
+    def __init__(self, task_id: UUID, score: float, passed: bool) -> None:
+        super().__init__(payload={"task_id": str(task_id), "score": score, "passed": passed})
+
+    @property
+    def task_id(self) -> UUID:
+        return UUID(self.payload["task_id"])
+
+    @property
+    def score(self) -> float:
+        return self.payload["score"]
+
+    @property
+    def passed(self) -> bool:
+        return self.payload["passed"]
+
+
+class EvaluationFailedEvent(BaseEvent):
+    """Emitted when task evaluation runs fail."""
+    def __init__(self, task_id: UUID, error: str) -> None:
+        super().__init__(payload={"task_id": str(task_id), "error": error})
+
+    @property
+    def task_id(self) -> UUID:
+        return UUID(self.payload["task_id"])
+
+    @property
+    def error(self) -> str:
+        return self.payload["error"]
+
+
+class RecommendationGeneratedEvent(BaseEvent):
+    """Emitted when a task recommendation is compiled."""
+    def __init__(self, task_id: UUID, insight: str) -> None:
+        super().__init__(payload={"task_id": str(task_id), "insight": insight})
+
+    @property
+    def task_id(self) -> UUID:
+        return UUID(self.payload["task_id"])
+
+    @property
+    def insight(self) -> str:
+        return self.payload["insight"]

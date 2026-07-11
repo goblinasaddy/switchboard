@@ -122,6 +122,36 @@ def doctor_command() -> None:
                     console.print(f"  [red][FAIL][/red] Memory Engine verification failed: {ex}")
                     raise
 
+                # Check Evaluation Engine
+                try:
+                    evaluation_engine = kernel.get_service("evaluation_engine")
+                    
+                    # Run mock evaluation to verify pipeline flow
+                    from switchboard.types.task import Task, TaskResult, TaskStatus
+                    from uuid import uuid4
+                    mock_task = Task(name="doctor-eval-task", objective="test evaluation", context_id=uuid4())
+                    mock_result = TaskResult(status=TaskStatus.COMPLETED)
+                    
+                    report = await evaluation_engine.evaluate_task(mock_task, mock_result)
+                    
+                    # Clean up the generated reflection from Memory Engine
+                    memory_engine = kernel.get_service("memory_engine")
+                    from switchboard.types.memory import MemoryQuery
+                    query = await memory_engine.retrieve_memories(
+                        query=MemoryQuery(tags=[f"task_{mock_task.task_id}"], limit=5)
+                    )
+                    # Let's just directly query by task ID tag or clean up
+                    for item in query:
+                        memory_engine.store.delete_entry(item.memory_id)
+                        
+                    console.print(
+                        f"  [green][OK][/green] Evaluation Engine verified. "
+                        f"Registered Evaluators: {[e.__class__.__name__ for e in evaluation_engine._evaluators]}"
+                    )
+                except Exception as ex:
+                    console.print(f"  [red][FAIL][/red] Evaluation Engine verification failed: {ex}")
+                    raise
+
                 await kernel.shutdown()
                 return True
             except Exception as ex:

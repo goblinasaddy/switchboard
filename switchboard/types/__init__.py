@@ -38,6 +38,12 @@ from switchboard.types.memory import (
     Reflection,
     MemoryQuery,
 )
+from switchboard.types.evaluation import (
+    EvaluationMetricType,
+    MetricScore,
+    Recommendation,
+    EvaluationReport,
+)
 from switchboard.types.events import (
     ProviderLoadedEvent,
     ProviderUnloadedEvent,
@@ -86,6 +92,10 @@ __all__ = [
     "MemoryEntry",
     "Reflection",
     "MemoryQuery",
+    "EvaluationMetricType",
+    "MetricScore",
+    "Recommendation",
+    "EvaluationReport",
     "ProviderLoadedEvent",
     "ProviderUnloadedEvent",
     "ModelLoadedEvent",

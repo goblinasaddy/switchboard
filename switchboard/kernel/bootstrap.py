@@ -84,7 +84,12 @@ async def bootstrap_platform(
     memory_engine = MemoryEngine(store=memory_store, event_bus=event_bus)
     registry.register("memory_engine", memory_engine)
 
-    # 11. Instantiate Kernel coordinator
+    # 11. Instantiate & Register Evaluation Layer (EvaluationEngine)
+    from switchboard.evaluation.manager import EvaluationEngine
+    evaluation_engine = EvaluationEngine(memory_engine=memory_engine, event_bus=event_bus)
+    registry.register("evaluation_engine", evaluation_engine)
+
+    # 12. Instantiate Kernel coordinator
     kernel = Kernel(settings=settings, registry=registry)
     logger.info("Kernel bootstrapped and ready for lifecycle initialization")
     

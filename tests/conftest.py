@@ -25,3 +25,21 @@ async def event_bus() -> EventBus:
     await bus.start()
     yield bus
     await bus.shutdown()
+
+
+@pytest.fixture(autouse=True)
+def clean_memory_file() -> None:
+    import os
+    # Clean before test
+    if os.path.exists(".switchboard/memory.json"):
+        try:
+            os.remove(".switchboard/memory.json")
+        except Exception:
+            pass
+    yield
+    # Clean after test
+    if os.path.exists(".switchboard/memory.json"):
+        try:
+            os.remove(".switchboard/memory.json")
+        except Exception:
+            pass
