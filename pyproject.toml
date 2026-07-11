@@ -1,0 +1,66 @@
+[project]
+name = "switchboard"
+version = "0.1.0"
+description = "A local-first AI Runtime Platform orchestrating local AI workloads."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [
+    { name = "Aditya Kumar Singh" }
+]
+dependencies = [
+    "typer>=0.12.3",
+    "fastapi>=0.111.0",
+    "pydantic>=2.7.0",
+    "pydantic-settings>=2.2.0",
+    "structlog>=24.1.0",
+    "rich>=13.7.0",
+    "networkx>=3.3",
+    "gitpython>=3.1.43",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.2.0",
+    "pytest-asyncio>=0.23.6",
+    "ruff>=0.4.4",
+    "pyright>=1.1.363",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "C",   # flake8-comprehensions
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+]
+ignore = []
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+line-ending = "auto"
+
+[tool.pyright]
+include = ["switchboard", "tests"]
+exclude = ["**/__pycache__", ".venv"]
+pythonVersion = "3.12"
+pythonPlatform = "All"
+typeCheckingMode = "strict"
+reportMissingImports = true
+reportMissingTypeStubs = false
+strictParameterNoneValue = true
+strictListInference = true
+strictDictionaryInference = true
+strictSetInference = true
