@@ -104,6 +104,24 @@ def doctor_command() -> None:
                     console.print(f"  [red][FAIL][/red] Execution Engine verification failed: {ex}")
                     raise
 
+                # Check Memory Engine
+                try:
+                    memory_engine = kernel.get_service("memory_engine")
+                    entry = await memory_engine.store_memory(
+                        type="knowledge",
+                        payload={"doctor_check": "ok"},
+                        tags=["doctor_check"]
+                    )
+                    # Clean up diagnostic memory
+                    memory_engine.store.delete_entry(entry.memory_id)
+                    console.print(
+                        f"  [green][OK][/green] Memory Engine verified. "
+                        f"Store: {memory_engine.store.__class__.__name__}"
+                    )
+                except Exception as ex:
+                    console.print(f"  [red][FAIL][/red] Memory Engine verification failed: {ex}")
+                    raise
+
                 await kernel.shutdown()
                 return True
             except Exception as ex:

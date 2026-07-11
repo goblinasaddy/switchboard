@@ -6,6 +6,7 @@ from switchboard.interfaces.provider import IProvider
 from switchboard.interfaces.context import IParser, IContextEngine
 from switchboard.interfaces.task import ITaskManager
 from switchboard.interfaces.execution import IExecutionEngine, ISchedulingPolicy
+from switchboard.interfaces.memory import IMemoryEngine, IMemoryStore
 
 __all__ = [
     "IService",
@@ -19,4 +20,6 @@ __all__ = [
     "ITaskManager",
     "IExecutionEngine",
     "ISchedulingPolicy",
+    "IMemoryEngine",
+    "IMemoryStore",
 ]

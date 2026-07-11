@@ -77,7 +77,14 @@ async def bootstrap_platform(
     )
     registry.register("execution_engine", execution_engine)
 
-    # 10. Instantiate Kernel coordinator
+    # 10. Instantiate & Register Memory Layer (MemoryEngine)
+    from switchboard.memory.manager import MemoryEngine
+    from switchboard.memory.store import JSONFileStore
+    memory_store = JSONFileStore(file_path=".switchboard/memory.json")
+    memory_engine = MemoryEngine(store=memory_store, event_bus=event_bus)
+    registry.register("memory_engine", memory_engine)
+
+    # 11. Instantiate Kernel coordinator
     kernel = Kernel(settings=settings, registry=registry)
     logger.info("Kernel bootstrapped and ready for lifecycle initialization")
     

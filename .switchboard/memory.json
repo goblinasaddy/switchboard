@@ -1,0 +1,47 @@
+[
+  {
+    "memory_id": "c71c9fe2-8be4-4a46-adee-1267e8e13836",
+    "type": "knowledge",
+    "lifecycle": "retrieved",
+    "repository_root": null,
+    "task_id": null,
+    "tags": [
+      "design"
+    ],
+    "payload": {
+      "pattern": "pipeline"
+    },
+    "created_at": 1783787859.4292908,
+    "updated_at": 1783787859.4292908,
+    "access_count": 1,
+    "last_accessed_at": 1783787859.4324424
+  },
+  {
+    "memory_id": "00064625-42ed-469d-a87b-38c16e598096",
+    "type": "reflection",
+    "lifecycle": "indexed",
+    "repository_root": null,
+    "task_id": "7ecfb899-39bf-44fd-afd2-6f632cb4e8c4",
+    "tags": [
+      "task_7ecfb899-39bf-44fd-afd2-6f632cb4e8c4",
+      "testing",
+      "reflection",
+      "continue"
+    ],
+    "payload": {
+      "reflection_id": "9a228a7f-0c71-4550-a168-9a69308c0386",
+      "task_id": "7ecfb899-39bf-44fd-afd2-6f632cb4e8c4",
+      "what_worked": "mock tests",
+      "what_failed": "none",
+      "recommendations": [
+        "continue testing"
+      ],
+      "metrics": {},
+      "created_at": 1783787859.4340498
+    },
+    "created_at": 1783787859.4340498,
+    "updated_at": 1783787859.4340498,
+    "access_count": 0,
+    "last_accessed_at": null
+  }
+]

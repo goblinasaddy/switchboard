@@ -31,6 +31,13 @@ from switchboard.types.execution import (
     ExecutionQueueState,
     WorkflowState,
 )
+from switchboard.types.memory import (
+    MemoryType,
+    MemoryLifecycle,
+    MemoryEntry,
+    Reflection,
+    MemoryQuery,
+)
 from switchboard.types.events import (
     ProviderLoadedEvent,
     ProviderUnloadedEvent,
@@ -74,6 +81,11 @@ __all__ = [
     "SystemResourceSnapshot",
     "ExecutionQueueState",
     "WorkflowState",
+    "MemoryType",
+    "MemoryLifecycle",
+    "MemoryEntry",
+    "Reflection",
+    "MemoryQuery",
     "ProviderLoadedEvent",
     "ProviderUnloadedEvent",
     "ModelLoadedEvent",

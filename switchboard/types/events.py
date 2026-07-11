@@ -389,3 +389,65 @@ class RetryScheduledEvent(BaseEvent):
     @property
     def delay_sec(self) -> float:
         return self.payload["delay_sec"]
+
+
+class MemoryCreatedEvent(BaseEvent):
+    """Emitted when a new memory entry is recorded."""
+    def __init__(self, memory_id: UUID, type: str) -> None:
+        super().__init__(payload={"memory_id": str(memory_id), "type": type})
+
+    @property
+    def memory_id(self) -> UUID:
+        return UUID(self.payload["memory_id"])
+
+    @property
+    def type(self) -> str:
+        return self.payload["type"]
+
+
+class MemoryUpdatedEvent(BaseEvent):
+    """Emitted when a memory entry is updated."""
+    def __init__(self, memory_id: UUID) -> None:
+        super().__init__(payload={"memory_id": str(memory_id)})
+
+    @property
+    def memory_id(self) -> UUID:
+        return UUID(self.payload["memory_id"])
+
+
+class MemoryRetrievedEvent(BaseEvent):
+    """Emitted when a query matches one or more memories."""
+    def __init__(self, query_text: str | None, count: int) -> None:
+        super().__init__(payload={"query_text": query_text, "count": count})
+
+    @property
+    def query_text(self) -> str | None:
+        return self.payload.get("query_text")
+
+    @property
+    def count(self) -> int:
+        return self.payload["count"]
+
+
+class MemoryArchivedEvent(BaseEvent):
+    """Emitted when a memory entry is archived."""
+    def __init__(self, memory_id: UUID) -> None:
+        super().__init__(payload={"memory_id": str(memory_id)})
+
+    @property
+    def memory_id(self) -> UUID:
+        return UUID(self.payload["memory_id"])
+
+
+class ReflectionStoredEvent(BaseEvent):
+    """Emitted when a task reflection is stored."""
+    def __init__(self, reflection_id: UUID, task_id: UUID) -> None:
+        super().__init__(payload={"reflection_id": str(reflection_id), "task_id": str(task_id)})
+
+    @property
+    def reflection_id(self) -> UUID:
+        return UUID(self.payload["reflection_id"])
+
+    @property
+    def task_id(self) -> UUID:
+        return UUID(self.payload["task_id"])
