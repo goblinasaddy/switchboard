@@ -44,7 +44,20 @@ async def bootstrap_platform(
     )
     registry.register("resource_manager", resource_manager)
 
-    # 6. Instantiate Kernel coordinator
+    # 6. Instantiate & Register Compute Layer (ComputeManager + ProviderRegistry)
+    from switchboard.registry.provider import ProviderRegistry
+    from switchboard.compute.adapters.mock import MockProvider
+    from switchboard.compute.adapters.ollama import OllamaProvider
+    from switchboard.compute.manager import ComputeManager
+
+    provider_registry = ProviderRegistry()
+    provider_registry.register("mock", MockProvider())
+    provider_registry.register("ollama", OllamaProvider(base_url=settings.ollama_url))
+    
+    compute_manager = ComputeManager(provider_registry=provider_registry, event_bus=event_bus)
+    registry.register("compute_manager", compute_manager)
+
+    # 7. Instantiate Kernel coordinator
     kernel = Kernel(settings=settings, registry=registry)
     logger.info("Kernel bootstrapped and ready for lifecycle initialization")
     

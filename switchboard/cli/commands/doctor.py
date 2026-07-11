@@ -35,7 +35,43 @@ def doctor_command() -> None:
         if settings.max_vram_gb < 6.0:
             console.print("    [yellow][WARN][/yellow] Warning: Configured VRAM is below recommended minimum of 6.0 GB.")
 
-    # 4. Diagnostics check summary
+    # 4. Check Compute Layer and Mock Provider loading
+    if settings:
+        import asyncio
+        from switchboard.kernel.bootstrap import bootstrap_platform
+
+        async def _check_compute() -> bool:
+            try:
+                kernel = await bootstrap_platform()
+                await kernel.initialize()
+                await kernel.start()
+                
+                compute_manager = kernel.get_service("compute_manager")
+                await compute_manager.load_provider("mock")
+                models = await compute_manager.list_models()
+                model_names = [m.name for m in models]
+                console.print(f"  [green][OK][/green] Compute Layer loaded provider 'mock'. Models: {model_names}")
+                
+                # Check Ollama connection
+                try:
+                    await compute_manager.load_provider("ollama")
+                    ollama_models = await compute_manager.list_models()
+                    ollama_model_names = [m.name for m in ollama_models]
+                    console.print(f"  [green][OK][/green] Ollama connection verified at {settings.ollama_url}. Models: {ollama_model_names}")
+                except Exception:
+                    console.print(f"  [yellow][WARN][/yellow] Ollama offline at {settings.ollama_url}. (Ollama backend not running)")
+
+                await kernel.shutdown()
+                return True
+            except Exception as ex:
+                console.print(f"  [red][FAIL][/red] Compute Layer verification failed: {ex}")
+                return False
+
+        compute_ok = asyncio.run(_check_compute())
+        if not compute_ok:
+            all_ok = False
+
+    # 5. Diagnostics check summary
     print()
     if all_ok:
         console.print("[bold green]All compatibility checks passed! SwitchBoard is ready to run.[/bold green]")
