@@ -1,6 +1,6 @@
 # SwitchBoard Architecture
 
-> **Version:** v0.1 (Draft)
+> **Version:** v0.2
 > **Status:** Active Design
 > **Last Updated:** July 2026
 
@@ -8,13 +8,13 @@
 
 # Overview
 
-SwitchBoard is a **local-first AI runtime platform** designed to orchestrate software engineering workflows using specialized AI models under constrained hardware resources.
+SwitchBoard is a **local-first AI compute orchestration platform** designed to orchestrate local AI workloads on consumer hardware. While software engineering is the platform's first target application, the architecture is designed as a general-purpose local AI compute orchestrator.
 
-Unlike traditional AI coding assistants that rely on a single general-purpose model, SwitchBoard treats AI workloads as a systems problem. It dynamically manages models, GPU memory, context, tools, and execution pipelines to maximize software engineering performance on consumer hardware.
+Unlike traditional AI systems that assume unlimited cloud compute or rely on single general-purpose models, SwitchBoard treats AI execution as a systems problem. It dynamically manages GPU memory, context, tools, and execution sessions to maximize performance and efficiency under constrained physical resources.
 
-SwitchBoard does **not** replace the operating system. Instead, it functions as an AI runtime layer that sits above existing inference engines such as Ollama or llama.cpp and below AI-powered applications.
+SwitchBoard does **not** replace the operating system or the inference engines. Instead, it functions as an AI compute orchestration layer that sits above local inference backends (such as Ollama, llama.cpp, or vLLM) and below thin, AI-powered applications.
 
-Its primary objective is to provide an extensible platform capable of running intelligent software engineering workflows while efficiently utilizing limited compute resources.
+Its primary objective is to provide a provider-agnostic, extensible platform capable of running resource-aware workflows while efficiently scheduling consumer-grade hardware.
 
 ---
 
@@ -49,7 +49,7 @@ No subsystem should depend on a specific implementation.
 
 Examples include:
 
-* Runtime engines
+* Compute providers
 * Models
 * Context optimization methods
 * Agents
@@ -101,7 +101,7 @@ SwitchBoard SDK
 Kernel
 
 ├── Scheduler
-├── Runtime
+├── Compute Layer
 ├── Context Engine
 ├── Memory Engine
 ├── Plugin Engine
@@ -109,12 +109,13 @@ Kernel
 
 ────────────────────────────────────────────
 
-Runtime Adapters
+Compute Providers
 
 ├── Ollama
 ├── llama.cpp
 ├── vLLM
-└── Future Runtimes
+├── MLX
+└── OpenAI-compatible APIs
 
 ────────────────────────────────────────────
 
@@ -172,19 +173,19 @@ The scheduler continuously determines which resources should be active and when.
 
 ---
 
-## Runtime
+## Compute Layer
 
-The Runtime provides a unified interface for executing AI models.
+The Compute Layer provides a unified, provider-agnostic abstraction for executing local AI workloads.
 
-Instead of directly interacting with Ollama, llama.cpp, or future inference engines, the rest of SwitchBoard communicates exclusively through the Runtime abstraction.
+Instead of subsystems directly invoking inference backends (like Ollama, llama.cpp, or vLLM), the platform coordinates executions through isolated Compute Sessions. All providers register dynamically with a Provider Registry rather than being instantiated directly by the Compute Layer.
 
 Responsibilities include:
 
-* Model loading
-* Model unloading
-* Inference execution
-* Runtime monitoring
-* Runtime abstraction
+* Provider registration and discovery (via the Provider Registry)
+* Model lifecycle orchestration (loading and unloading models to/from VRAM)
+* Isolated execution scoping (via Compute Sessions)
+* Generation tracking (capturing token usage, latency, and cancel-safety)
+* Provider-specific error translation (mapping provider errors to SwitchBoard errors)
 
 ---
 
@@ -286,7 +287,10 @@ Scheduler
 Context Engine
         │
         ▼
-Runtime
+Compute Session
+        │
+        ▼
+Compute Layer
         │
         ▼
 Model Execution
@@ -310,7 +314,7 @@ Future extensions may include:
 
 * Multi-GPU execution
 * Distributed execution
-* Remote runtimes
+* Remote compute providers
 * Additional model providers
 * IDE integrations
 * Marketplace for plugins
@@ -324,16 +328,14 @@ The architecture should evolve through extension rather than modification.
 
 # Scope
 
-The current scope of SwitchBoard is focused on software engineering workflows executed using local AI models.
-
-Future versions may expand beyond software engineering into additional domains, but the architecture should remain domain-agnostic wherever possible.
+The initial scope of SwitchBoard is focused on software engineering workflows executed using local AI models. However, the platform is architecturally designed as a general-purpose local AI compute orchestration engine capable of hosting any category of local model workloads.
 
 ---
 
 # Long-Term Vision
 
-SwitchBoard aims to become a foundational runtime platform for local AI applications.
+SwitchBoard aims to become a foundational local AI compute orchestration platform.
 
 Rather than building a single AI coding assistant, the project seeks to provide the infrastructure upon which many AI-powered applications can be developed.
 
-Its long-term goal is to enable intelligent orchestration of models, context, memory, tools, and compute resources while remaining modular, extensible, and accessible to developers running on consumer hardware.
+Its long-term goal is to enable intelligent orchestration of models, sessions, context, memory, tools, and compute resources while remaining modular, extensible, and accessible to developers running on consumer hardware. This culminates in a robust Ecosystem including a package manager, plugin registry, and community marketplace.

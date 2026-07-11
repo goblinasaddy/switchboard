@@ -16,161 +16,97 @@ The roadmap below outlines the long-term direction of the platform.
 
 ---
 
-# Foundation Era (Current)
+# Long-Term Roadmap
 
-**Objective:** Build the core runtime platform.
+The platform evolution is divided into structured phases. Each phase builds upon the previous one to deliver an increasingly capable, resource-aware, and community-driven orchestration system.
 
-This phase focuses on creating a stable, extensible architecture that every future capability will build upon.
+## Phase 0 — Foundation ✅
 
-## Goals
-
-* Establish the project architecture
-* Build the SwitchBoard Kernel
-* Create the Runtime abstraction
-* Develop the Scheduler
-* Implement the Context Engine
-* Design the Memory Engine
-* Build the Plugin System
-* Release the Python SDK
-* Deliver the first CLI application
-
-**Milestone**
-
-A developer can install SwitchBoard, connect a local model, analyze a repository, and execute a complete software engineering workflow.
+**Objective:** Create the platform skeleton.
+* Dynamic Service Registry for dependency management.
+* High-performance asynchronous Event Bus.
+* Priority-based Configuration (TOML, Env, Overrides) and structured JSON logging.
+* Interface skeleton, basic plugin manager, and interactive CLI.
 
 ---
 
-# Intelligence Era
+## Phase 1 — Compute Layer ✅
 
-**Objective:** Make SwitchBoard significantly more capable without requiring larger models.
-
-This phase focuses on improving orchestration rather than increasing model size.
-
-## Planned Features
-
-* Dynamic model routing
-* Intelligent task decomposition
-* Context optimization pipeline
-* Repository understanding
-* Reflection loops
-* Self-evaluation
-* Failure recovery
-* Execution history
-* Adaptive scheduling
-* Workflow optimization
-
-**Goal**
-
-Improve engineering performance by making better use of existing hardware.
+**Objective:** Validate Compute Layer abstraction against a real inference backend.
+* Decouple inference orchestration from specific backend providers (such as Ollama or llama.cpp).
+* Implement provider-agnostic `IProvider`, `Model`, `GenerationRequest`, and `GenerationResponse` models.
+* Create isolated `ComputeSession` traces to manage stream cancellation and execution history.
+* Dynamic `ProviderRegistry` allowing decoupled auto-discovery of engines.
+* Validated using a full `OllamaProvider` implementation.
 
 ---
 
-# Ecosystem Era
+## Phase 2 — Context Engine
 
-**Objective:** Turn SwitchBoard into an open platform.
-
-This phase focuses on enabling community contributions.
-
-## Planned Features
-
-* Plugin Marketplace
-* Community agent registry
-* Model registry
-* Context plugin ecosystem
-* Evaluation plugins
-* Workflow templates
-* Public SDK improvements
-* Documentation portal
-* Developer tools
-
-**Goal**
-
-Allow developers to extend SwitchBoard without modifying its core.
+**Objective:** Extract and index repository structure to minimize context windows.
+* Scan directory structures and build symbol index tables.
+* Use AST analysis to extract code relations and symbols.
+* Construct code dependency graphs to support semantic lookups.
+* Minimize prompt context footprints using pluggable context compression strategies.
 
 ---
 
-# Studio Era
+## Phase 3 — Scheduler
 
-**Objective:** Build a complete developer experience.
-
-This phase introduces graphical tools and integrations.
-
-## Planned Features
-
-* SwitchBoard Studio
-* VS Code Extension
-* Desktop Application
-* Web Dashboard
-* Execution Visualizer
-* Performance Profiler
-* Context Inspector
-* Workflow Designer
-* Plugin Manager
-
-**Goal**
-
-Provide an intuitive interface for building and managing AI workflows.
+**Objective:** Resource-aware scheduling of AI workloads on consumer-grade hardware.
+* Dynamic VRAM scheduling (loading/unloading model weight files on-demand).
+* Enforce model context limitations and memory priority queues.
+* Target consumer setups (e.g. 6 GB, 8 GB, 12 GB, 16 GB VRAM configurations) dynamically.
+* Implement task queues to isolate compute spikes and balance thread allocations.
 
 ---
 
-# Distributed Era
+## Phase 4 — Memory Engine
 
-**Objective:** Expand beyond a single machine.
-
-This phase introduces distributed execution and advanced scheduling.
-
-## Planned Features
-
-* Multi-GPU execution
-* Multi-machine execution
-* Remote runtimes
-* Distributed scheduling
-* Shared memory systems
-* Cluster management
-* Hybrid local/cloud execution
-* Resource balancing
-
-**Goal**
-
-Scale SwitchBoard from individual laptops to workstations and clusters without changing application code.
+**Objective:** Retain and reuse engineering knowledge across executions.
+* Store code semantics, structural graphs, and reflection outcomes.
+* Enable cross-session memory lookup to prevent redundant LLM queries.
+* Save execution templates and plan history for continuous optimization.
 
 ---
 
-# Research Era
+## Phase 5 — First End-to-End Workflow
 
-**Objective:** Advance the state of local AI orchestration.
+**Objective:** Execute the first integrated software engineering task autonomously.
+* Connect Context, Compute, and Tool layers to solve real bugs from issue descriptions.
+* Deliver localized patches, verify changes through unit tests, and output complete review results.
 
-This phase focuses on experimentation, benchmarking, and academic contributions.
+---
 
-## Planned Areas
+## Phase 6 — Evaluation & Benchmarking
 
-* Resource-aware scheduling algorithms
-* Context engineering research
-* Specialized model orchestration
-* Execution optimization
-* Benchmark suites
-* Evaluation methodologies
-* Open datasets
-* Scientific publications
+**Objective:** Record quality metrics, throughput latency, and cost factors.
+* Benchmarking dashboards tracking latency, tokens-per-second, and VRAM efficiency.
+* System evaluation loops to prevent performance regressions on local codebases.
 
-**Goal**
+---
 
-Establish SwitchBoard as both an engineering platform and a research foundation.
+## Phase 7 — Ecosystem Phase
+
+**Objective:** Culmination of the platform as an open, community-driven registry.
+* **Plugin SDK**: Standard protocols and guidelines for building plugins.
+* **Marketplace**: Publish and share customized agents, tools, and optimizers.
+* **Package Manager**: Install and update plugins seamlessly.
+* **Community Registry**: Central database of approved community plugins.
+* **Documentation Portal**: Interactive developer guides and references.
+* **Version Compatibility**: Tools to check plugin/platform version compliance.
+* **Developer Tooling**: CLI testing generators for plugin validation.
 
 ---
 
 # Future Domains
 
-Although SwitchBoard begins with software engineering, its architecture is intentionally domain-agnostic.
-
-Potential future applications include:
+Although SwitchBoard begins with software engineering, its architecture is intentionally domain-agnostic. Potential future applications include:
 
 * Scientific research
 * Robotics
 * Cybersecurity
 * Data engineering
-* Education
-* Healthcare
 * Autonomous agents
 * Enterprise workflow automation
 

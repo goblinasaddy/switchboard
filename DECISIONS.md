@@ -19,13 +19,13 @@
 
 ## Decision
 
-SwitchBoard will be developed as an AI runtime platform rather than a standalone AI coding assistant.
+SwitchBoard will be developed as a local-first AI compute orchestration platform rather than a standalone AI coding assistant.
 
 ## Reasoning
 
 Most existing AI projects focus on solving one application (coding, research, writing, etc.).
 
-SwitchBoard instead provides reusable infrastructure that allows multiple AI-powered applications to be built on top of the same runtime.
+SwitchBoard instead provides reusable compute orchestration infrastructure that allows multiple AI-powered applications to be built on top of the same coordination layer.
 
 Applications become consumers of the platform instead of containing their own orchestration logic.
 
@@ -84,25 +84,26 @@ SwitchBoard instead assumes constrained hardware and optimizes resource allocati
 
 ---
 
-# Decision 004 — Runtime Abstraction
+# Decision 004 — Compute Layer Abstraction
 
 **Status:** Accepted
 
 ## Decision
 
-No subsystem communicates directly with Ollama, llama.cpp, vLLM, or any other inference engine.
+No subsystem communicates directly with Ollama, llama.cpp, vLLM, or any other inference backend.
 
-All model execution occurs through a unified Runtime interface.
+All model execution, loading, and registration occur through the Compute Layer interface, using a dynamic Provider Registry and isolated Compute Sessions.
 
 ## Reasoning
 
-This prevents vendor lock-in and allows additional runtimes to be added without modifying higher-level systems.
+This prevents vendor lock-in, abstracts model loading states (including VRAM residency), and provides clean session-oriented boundaries for history tracking and stream cancellations.
 
 ## Consequences
 
 * Easier extensibility
 * Cleaner testing
-* Runtime independence
+* Provider independence
+* Session-isolated trace boundaries
 
 ---
 
@@ -274,6 +275,26 @@ Research contributions should emerge naturally from implementation, experimentat
 * Development is prioritized over paper writing.
 * Evaluation infrastructure is planned early.
 * Future publications will be backed by measurable results.
+
+---
+
+# Decision 012 — Session-Based Execution Flow
+
+**Status:** Accepted
+
+## Decision
+
+Every generation/inference request is scoped within a `ComputeSession` instead of directly executing on a provider.
+
+## Reasoning
+
+Scoping generation inside sessions allows the platform to support features like conversation history, repository context caching, runtime execution memory, and cancel-safety directly at the session boundary. Providers remain thin and stateless, focusing solely on executing the raw model forward passes.
+
+## Consequences
+
+* Provides clean cancellation hooks (disconnecting active streams) without affecting other parallel generations.
+* Keeps provider code stateless and simpler.
+* Enables session-level telemetry (e.g. cumulative token usages and overall session latency).
 
 ---
 
