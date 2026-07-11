@@ -71,6 +71,39 @@ def doctor_command() -> None:
                     console.print(f"  [red][FAIL][/red] Context Engine indexing failed: {ex}")
                     raise
 
+                # Check Task System
+                try:
+                    from switchboard.types.task import TaskContext, TaskStatus
+                    task_manager = kernel.get_service("task_manager")
+                    import os
+                    context = TaskContext(repository_root=os.getcwd())
+                    task = await task_manager.create_task(
+                        name="Doctor Diagnostic Run",
+                        objective="Perform diagnostic validation checks",
+                        context=context
+                    )
+                    if task.status == TaskStatus.CREATED:
+                        console.print(f"  [green][OK][/green] Task System registered diagnostic task: {task.task_id}")
+                    else:
+                        raise ValueError(f"Diagnostic task created in invalid status: {task.status}")
+                except Exception as ex:
+                    console.print(f"  [red][FAIL][/red] Task System verification failed: {ex}")
+                    raise
+
+                # Check Execution Engine
+                try:
+                    execution_engine = kernel.get_service("execution_engine")
+                    state = await execution_engine.monitor.get_queue_state()
+                    res = execution_engine.monitor.get_resource_snapshot()
+                    console.print(
+                        f"  [green][OK][/green] Execution Engine verified. "
+                        f"Queues -> Waiting: {state.waiting_count}, Ready: {state.ready_count}, Running: {state.running_count}. "
+                        f"Available VRAM: {res.available_vram_gb:.1f}/{res.total_vram_gb:.1f} GB"
+                    )
+                except Exception as ex:
+                    console.print(f"  [red][FAIL][/red] Execution Engine verification failed: {ex}")
+                    raise
+
                 await kernel.shutdown()
                 return True
             except Exception as ex:

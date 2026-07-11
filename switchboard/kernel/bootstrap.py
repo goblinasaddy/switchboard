@@ -62,7 +62,22 @@ async def bootstrap_platform(
     context_manager = ContextManager(root_path=".", event_bus=event_bus)
     registry.register("context_manager", context_manager)
 
-    # 8. Instantiate Kernel coordinator
+    # 8. Instantiate & Register Task Layer (TaskManager)
+    from switchboard.task.manager import TaskManager
+    task_manager = TaskManager(event_bus=event_bus)
+    registry.register("task_manager", task_manager)
+
+    # 9. Instantiate & Register Execution Layer (ExecutionEngine)
+    from switchboard.execution.manager import ExecutionEngine
+    execution_engine = ExecutionEngine(
+        task_manager=task_manager,
+        event_bus=event_bus,
+        max_vram_gb=settings.max_vram_gb,
+        max_ram_gb=settings.max_ram_gb
+    )
+    registry.register("execution_engine", execution_engine)
+
+    # 10. Instantiate Kernel coordinator
     kernel = Kernel(settings=settings, registry=registry)
     logger.info("Kernel bootstrapped and ready for lifecycle initialization")
     

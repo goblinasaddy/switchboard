@@ -14,6 +14,23 @@ from switchboard.types.context import (
     RepositoryModel,
     ContextPackage,
 )
+from switchboard.types.task import (
+    Task,
+    TaskStatus,
+    TaskPriority,
+    Artifact,
+    ArtifactType,
+    ResourceRequirements,
+    TaskContext,
+    ExecutionPlan,
+    TaskResult,
+)
+from switchboard.types.execution import (
+    ExecutionQueueStatus,
+    SystemResourceSnapshot,
+    ExecutionQueueState,
+    WorkflowState,
+)
 from switchboard.types.events import (
     ProviderLoadedEvent,
     ProviderUnloadedEvent,
@@ -44,6 +61,19 @@ __all__ = [
     "SourceFile",
     "RepositoryModel",
     "ContextPackage",
+    "Task",
+    "TaskStatus",
+    "TaskPriority",
+    "Artifact",
+    "ArtifactType",
+    "ResourceRequirements",
+    "TaskContext",
+    "ExecutionPlan",
+    "TaskResult",
+    "ExecutionQueueStatus",
+    "SystemResourceSnapshot",
+    "ExecutionQueueState",
+    "WorkflowState",
     "ProviderLoadedEvent",
     "ProviderUnloadedEvent",
     "ModelLoadedEvent",

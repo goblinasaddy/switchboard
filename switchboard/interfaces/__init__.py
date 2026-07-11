@@ -4,6 +4,8 @@ from switchboard.interfaces.registry import IRegistry
 from switchboard.interfaces.compute import IComputeLayer, IComputeSession
 from switchboard.interfaces.provider import IProvider
 from switchboard.interfaces.context import IParser, IContextEngine
+from switchboard.interfaces.task import ITaskManager
+from switchboard.interfaces.execution import IExecutionEngine, ISchedulingPolicy
 
 __all__ = [
     "IService",
@@ -14,4 +16,7 @@ __all__ = [
     "IProvider",
     "IParser",
     "IContextEngine",
+    "ITaskManager",
+    "IExecutionEngine",
+    "ISchedulingPolicy",
 ]
